@@ -61,22 +61,16 @@ class MainPage(QWidget):
         
         expenses_expander = Expander("Расходы", self.table, False)
 
-        # splitter = QSplitter(Qt.Vertical)
+        splitter = QSplitter(Qt.Vertical)
 
-        # bottom_widget = QWidget()
+        bottom_widget = QWidget()
 
-        # splitter.addWidget(expenses_expander)
-        # splitter.addWidget(bottom_widget)  
+        splitter.addWidget(expenses_expander)
+        splitter.addWidget(bottom_widget)  
 
-        # splitter = QSplitter(Qt.Vertical)
+        layout.addWidget(splitter)
 
-        # splitter.addWidget(expenses_expander)
-
-        # layout.addWidget(splitter)
-
-        layout.addWidget(expenses_expander)
-
-        layout.addStretch()
+        # layout.addWidget(expenses_expander)
 
     def load_data(self):
         table_data = serv_view_proc.get_expenses_by_day(
