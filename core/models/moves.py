@@ -1,10 +1,11 @@
-from base           import Base
-from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy     import String, DateTime, Integer, ForeignKey
-from datetime       import date, datetime
-from accounts       import Accounts
-from categories     import Categories
-from typing         import Optional
+from .base               import Base
+from sqlalchemy.orm      import Mapped, mapped_column, relationship
+from sqlalchemy          import String, DateTime, Integer, ForeignKey
+from datetime            import date, datetime
+from typing              import Optional
+from ..models.accounts   import Accounts
+from ..models.categories import Categories
+
 
 class Moves(Base):
     __tablename__ = "moves"
@@ -16,7 +17,7 @@ class Moves(Base):
     move_is_income: Mapped[bool] = mapped_column(default=False)
     category_id: Mapped[int]     = mapped_column(ForeignKey("categories.id"))
     move_sum: Mapped[int]        = mapped_column(Integer)
-    comment: Mapped[str]         = mapped_column(Strign(200))
+    comment: Mapped[str]         = mapped_column(String(200))
 
     account: Mapped["Accounts"]    = relationship()
     category: Mapped["Categories"] = relationship()

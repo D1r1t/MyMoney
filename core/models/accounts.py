@@ -1,7 +1,7 @@
-from base           import Base
-from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy     import String, ForeignKey
-from currency       import Currency
+from .base             import Base
+from sqlalchemy.orm    import Mapped, mapped_column, relationship
+from sqlalchemy        import String, ForeignKey
+from ..models.currency import Currency
 
 class Accounts(Base):
     __tablename__ = "accounts"
@@ -17,4 +17,4 @@ class Accounts(Base):
         self.currency = currency
 
     def __repr__(self) -> str:
-        return f"Account(id = {self.id}, acc_name = {self.acc_name}, currency_id = {self.currency_id})"
+        return f"Account(id = {self.id}, acc_name = {self.acc_name}, currency_id = {self.currency.id})"

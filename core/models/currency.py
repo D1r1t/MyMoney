@@ -1,13 +1,14 @@
-from base           import Base
+from .base          import Base
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy     import String
+
 
 class Currency(Base):
     __tablename__ = "currency"
 
     id: Mapped[int]       = mapped_column(primary_key=True)
-    cur_name: Mapped[str] = mapped_column(Strign(150))
+    cur_name: Mapped[str] = mapped_column(String(150))
     is_main: Mapped[bool] = mapped_column(default=False)
 
     def __init__(self, cur_name: str, is_main: bool):

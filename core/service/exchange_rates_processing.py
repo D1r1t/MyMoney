@@ -1,9 +1,9 @@
-from sqlalchemy.orm        import sessionmaker
-from sqlalchemy            import select
-from models.exchange_rates import Exchange_rates
-from models.currency       import Currency
-from db.db                 import engine
-from datetime              import date, datetime
+from sqlalchemy.orm          import sessionmaker
+from sqlalchemy              import select
+from ..models.exchange_rates import Exchange_rates
+from ..models.currency       import Currency
+from ..db.db                 import engine
+from datetime                import date, datetime
 
 Session = sessionmaker(engine)
 
@@ -13,11 +13,11 @@ def create_new_exchange_rate(rate_date: datetime, main_currency: Currency, curre
     with Session() as session:
         ex_rate = {"rate_date": rate_date, "main_currency": main_currency, "current_currency": current_currency, "rare": rare}
 
-        exists = get_exchange_rate(session, ex_rate) is not None
+        #exists = get_exchange_rate(session, ex_rate) is not None
 
         try: 
-            if exists:
-                raise Exception
+            #if exists:
+            #    raise Exception
 
             new_exchange_rate = Exchange_rates(ex_rate)
             session.add(new_account)   

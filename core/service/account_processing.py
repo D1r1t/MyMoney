@@ -1,8 +1,10 @@
-from sqlalchemy.orm  import sessionmaker
-from sqlalchemy      import select
-from models.accounts import Accounts
-from models.currency import Currency
-from db.db           import engine
+from sqlalchemy.orm    import sessionmaker, joinedload
+from sqlalchemy        import select
+from ..models.accounts import Accounts
+from ..models.currency import Currency
+from ..db.db           import engine
+
+from ..exceptions import AccountError, AccountAlreadyExistsError, AccountWasntFound
 
 Session = sessionmaker(engine)
 
@@ -14,7 +16,7 @@ def create_new_account(acc_name: str, currency: Currency) -> Accounts:
 
         try: 
             if exists:
-                raise Exception
+                raise AccountAlreadyExistsError(acc_name)
 
             new_account = Accounts(acc_name, currency)
             session.add(new_account)   
@@ -33,3 +35,32 @@ def get_account(session, acc: int | str) -> Accounts | None:
     db_object = session.scalars(statement).one_or_none()
     
     return db_object 
+
+def get_all_accounts() -> Array:
+    with Session() as session:
+        try:
+            statement = select(Accounts)
+            db_objects = session.scalars(
+                statement.
+                options(
+                    joinedload(Accounts.currency)
+                )
+                
+            ).all()
+        except:
+            raise AccountError
+        else:
+            return db_objects
+
+def get_account_by_name(name: str) -> Accounts:
+    with Session() as session:
+        try:
+            statement = select(Accounts).where(Accounts.acc_name == name)
+            db_object = session.scalars(statement).one_or_none()
+            if db_object == None:
+                raise AccountWasntFound(name)
+        except Exception as e:
+            print(f"ты еблан: {e}")
+            raise AccountError
+        else:
+            return db_object

@@ -1,8 +1,8 @@
-from base           import Base
-from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy     import String, DateTime, Integer, ForeignKey
-from datetime       import date, datetime
-from currency       import Currency
+from .base            import Base
+from sqlalchemy.orm   import Mapped, mapped_column, relationship
+from sqlalchemy       import String, DateTime, Integer, ForeignKey
+from datetime         import date, datetime
+from ..models.currency       import Currency
 
 class Exchange_rates(Base):
     __tablename__ = "exchange_rates"
@@ -13,8 +13,8 @@ class Exchange_rates(Base):
     current_currency_id: Mapped[int] = mapped_column(ForeignKey("currency.id"))
     rare: Mapped[int]                = mapped_column(Integer)
 
-    main_currency: Mapped["Currency"]    = relationship()
-    current_currency: Mapped["Currency"] = relationship()
+    main_currency: Mapped["Currency"]    = relationship(foreign_keys=[main_currency_id])
+    current_currency: Mapped["Currency"] = relationship(foreign_keys=[current_currency_id])
 
     def __init__(self, rate_date: datetime, main_currency: Currency, current_currency: Currency, rare: int):
         self.rate_date        = rate_date
