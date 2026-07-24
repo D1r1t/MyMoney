@@ -25,12 +25,7 @@ class Expander(QWidget):
             self.content_widget.setLayout(content)
 
         self.layout.addWidget(self.content_widget)
-
-        # self.layout.addStretch()
-
         self.content_widget.setVisible(self.expanded)
-
-
 
     def on_toggle(self, checked):
         self.content_widget.setVisible(checked)

@@ -12,9 +12,13 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Семейный бюджет")
-        self.setMinimumSize(1200, 800)
+        self.setMinimumSize(800, 600)
 
         tabs = QTabWidget()
+        
+        tabs.setTabPosition(QTabWidget.TabPosition.West)
+        tabs.setDocumentMode(True)
+
         tabs.addTab(MainPage(), "Главная")
         tabs.addTab(CategoriesPage(), "Категории")
 
@@ -27,7 +31,7 @@ class MainWindow(QMainWindow):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     
-    apply_stylesheet(app, theme="dark_amber.xml")
+    apply_stylesheet(app, theme="dark_lightgreen.xml")
 
     window = MainWindow()
     window.show()
