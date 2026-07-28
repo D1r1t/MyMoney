@@ -1,27 +1,19 @@
 from PySide6.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout,
-    QTableWidget, QTableWidgetItem, QHeaderView,
-    QPushButton, QLineEdit, QLabel, QMessageBox, QDateEdit,
+    QWidget, QVBoxLayout, QHBoxLayout, QHeaderView,
+    QPushButton, QLabel, QMessageBox, QDateEdit,
     QSplitter 
 )
 
-from PySide6.QtCore import (
-    QDate, Qt 
-)
+from PySide6.QtCore import QDate
 
-import core.service.currency_processing       as serv_cur_proc 
-import core.service.account_processing        as serv_acc_proc 
-import core.service.categories_processing     as serv_cat_proc
-import core.service.exchange_rates_processing as serv_ex_rat_proc 
-import core.service.moves_processing          as serv_mov_proc
-import core.service.views_processing          as serv_view_proc
+import core.service.views_processing as serv_view_proc
 
 import pandas as pd
 
 from core.exceptions import CategoryAlreadyExistsError, AppError
 from widgets.table import BaseTable
-from widgets.expander import Expander
-from widgets.submit_form import Form
+
+# ================================================================================
 
 class ExpansesTab(QWidget):
     def __init__(self):
@@ -58,10 +50,10 @@ class ExpansesTab(QWidget):
 
         self.expenses = BaseTable(["Дата","Счет","Категория","Расход"])
         # expenses_expander = Expander("Расходы", self.expenses)
-
+        self.load_expenses_data()
         layout.addWidget(self.expenses)
 
-
+# --------------------------------------------------------------------------------
 
     def load_expenses_data(self):
         table_data = serv_view_proc.get_expenses_by_day(

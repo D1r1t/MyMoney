@@ -6,10 +6,12 @@ from ..db.db           import engine
 
 from ..exceptions import AccountError, AccountAlreadyExistsError, AccountWasntFound
 
+# ================================================================================
+
 Session = sessionmaker(engine)
 
-#возможно создание сессий будет перенесено в интерфейс или нужно будет подумать
-#куда и как их правильно распределить
+# --------------------------------------------------------------------------------
+
 def create_new_account(acc_name: str, currency: Currency) -> Accounts: 
     with Session() as session:
         exists = get_account(session, acc_name) is not None
@@ -26,6 +28,8 @@ def create_new_account(acc_name: str, currency: Currency) -> Accounts:
         else:
             session.commit()
 
+# --------------------------------------------------------------------------------
+
 def get_account(session, acc: int | str) -> Accounts | None:
     if isinstance(acc, int):
         statement = select(Accounts).where(Accounts.id == acc)
@@ -35,6 +39,8 @@ def get_account(session, acc: int | str) -> Accounts | None:
     db_object = session.scalars(statement).one_or_none()
     
     return db_object 
+
+# --------------------------------------------------------------------------------
 
 def get_all_accounts() -> Array:
     with Session() as session:
@@ -51,6 +57,8 @@ def get_all_accounts() -> Array:
             raise AccountError
         else:
             return db_objects
+
+# --------------------------------------------------------------------------------
 
 def get_account_by_name(name: str) -> Accounts:
     with Session() as session:

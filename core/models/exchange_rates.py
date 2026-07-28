@@ -4,7 +4,9 @@ from sqlalchemy       import String, DateTime, Integer, ForeignKey
 from datetime         import date, datetime
 from ..models.currency       import Currency
 
-class Exchange_rates(Base):
+# ================================================================================
+
+class ExchangeRates(Base):
     __tablename__ = "exchange_rates"
 
     id: Mapped[int]                  = mapped_column(primary_key=True)

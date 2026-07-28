@@ -7,7 +7,11 @@ from ..db.db             import engine
 from datetime            import date, datetime
 from ..exceptions        import MovesError, MoveDoesntExists
 
+# ================================================================================
+
 Session = sessionmaker(engine)
+
+# --------------------------------------------------------------------------------
 
 def create_new_move(
     plan_rec: bool, 
@@ -28,6 +32,8 @@ def create_new_move(
             raise
         else:
             session.commit()
+
+# --------------------------------------------------------------------------------
 
 def update_move(
     id: int,
@@ -61,6 +67,7 @@ def update_move(
         else:
             session.commit()
 
+# --------------------------------------------------------------------------------
 
 def delete_move(id: int):
     with Session() as session:
@@ -78,10 +85,12 @@ def delete_move(id: int):
         else:
             session.commit() 
 
-def get_moves(start_date: datetime, end_date: datetime) -> Array:
+# --------------------------------------------------------------------------------
+
+def get_moves(start_date: datetime, end_date: datetime) -> list:
     with Session() as session:
         try:
-            statement  = select(Moves).where(and_(Moves.rec_date >= start_date, Moves.rec_date <= end_date))
+            statement  = select(Moves).where(and_(Moves.rec_date >= start_date, Moves.rec_date <= end_date)).order_by(Moves.rec_date)
             db_objects = session.scalars(
                 statement.
                 options(
@@ -96,6 +105,8 @@ def get_moves(start_date: datetime, end_date: datetime) -> Array:
             raise
         else:
             session.commit()
+
+# --------------------------------------------------------------------------------
 
 def get_move_by_id(session, id: int) -> Moves | None:
     try:

@@ -4,6 +4,8 @@ from sqlalchemy        import String, ForeignKey, Integer
 from ..models.currency import Currency
 from datetime          import datetime
 
+# ================================================================================
+
 class AnaliticByDay(Base):
     __tablename__ = "analitic_by_day"
 

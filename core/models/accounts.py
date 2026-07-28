@@ -3,6 +3,8 @@ from sqlalchemy.orm    import Mapped, mapped_column, relationship
 from sqlalchemy        import String, ForeignKey
 from ..models.currency import Currency
 
+# ================================================================================
+
 class Accounts(Base):
     __tablename__ = "accounts"
 

@@ -1,12 +1,18 @@
 import sys
 from PySide6.QtWidgets import (
-    QApplication, QMainWindow, QWidget,
-    QVBoxLayout, QHBoxLayout, QTabWidget
+    QApplication, QMainWindow,
+    QVBoxLayout, QTabWidget
 )
+
 from pages.categories_page import CategoriesPage
 from pages.main_page import MainPage
+from pages.accounts_page import AccountsPage
+from pages.currencies_page import CurrenciesPage
+from pages.exchenge_rates_page import ExchangeRatesPage
 
 from qt_material import apply_stylesheet
+
+# ================================================================================
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -21,6 +27,9 @@ class MainWindow(QMainWindow):
 
         tabs.addTab(MainPage(), "Главная")
         tabs.addTab(CategoriesPage(), "Категории")
+        tabs.addTab(AccountsPage(), "Счета")
+        tabs.addTab(CurrenciesPage(), "Валюты")
+        tabs.addTab(ExchangeRatesPage(), "Курсы")
 
         #central = QWidget()
         self.setCentralWidget(tabs)

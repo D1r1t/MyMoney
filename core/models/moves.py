@@ -6,6 +6,7 @@ from typing              import Optional
 from ..models.accounts   import Accounts
 from ..models.categories import Categories
 
+# ================================================================================
 
 class Moves(Base):
     __tablename__ = "moves"
@@ -21,6 +22,8 @@ class Moves(Base):
 
     account: Mapped["Accounts"]    = relationship()
     category: Mapped["Categories"] = relationship()
+
+# --------------------------------------------------------------------------------
 
     def __init__(self, 
                     plan_rec:       bool, 
@@ -38,6 +41,8 @@ class Moves(Base):
         self.category       = category
         self.move_sum       = move_sum
         self.comment        = comment
+
+# --------------------------------------------------------------------------------
 
     def __repr__(self) -> str:
         return (

@@ -2,6 +2,8 @@ from .base          import Base
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy     import String, ForeignKey
 
+# ================================================================================
+
 class Categories(Base):
     __tablename__ = "categories"
 

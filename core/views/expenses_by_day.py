@@ -4,6 +4,8 @@ from sqlalchemy        import String, ForeignKey, Integer
 from ..models.currency import Currency
 from datetime          import datetime
 
+# ================================================================================
+
 class ExpensesByDay(Base):
     __tablename__ = "expenses_by_day"
 

@@ -1,6 +1,8 @@
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QSizePolicy, QSplitter
 from PySide6.QtCore import Qt
 
+# ================================================================================
+
 class Expander(QWidget):
     def __init__(self, title: str, content: QWidget | QVBoxLayout, expanded=False):
         super().__init__()
@@ -26,6 +28,8 @@ class Expander(QWidget):
 
         self.layout.addWidget(self.content_widget)
         self.content_widget.setVisible(self.expanded)
+
+# --------------------------------------------------------------------------------
 
     def on_toggle(self, checked):
         self.content_widget.setVisible(checked)

@@ -5,6 +5,8 @@ from ..db.db             import engine
 
 from ..exceptions import CategoryError, CategoryAlreadyExistsError, CategoryWasntFound
 
+# ================================================================================
+
 Session = sessionmaker(engine)
 
 def create_new_category(cat_name: str):
@@ -23,6 +25,8 @@ def create_new_category(cat_name: str):
         else:
             session.commit()
 
+# --------------------------------------------------------------------------------
+
 def get_category(session, cat: int|str) -> Categories:
     if isinstance(cat, int):
         statement = select(Categories).where(Categories.id == cat)
@@ -33,6 +37,8 @@ def get_category(session, cat: int|str) -> Categories:
 
     return db_object
 
+# --------------------------------------------------------------------------------
+
 def get_all_categories() -> Array:
     with Session() as session:
         try:
@@ -42,6 +48,8 @@ def get_all_categories() -> Array:
             raise CategoryError
         else:
             return db_objects
+
+# --------------------------------------------------------------------------------
 
 def get_category_by_name(name: str) -> Categories:
     with Session() as session:
