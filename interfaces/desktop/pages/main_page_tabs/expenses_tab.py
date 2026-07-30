@@ -1,12 +1,14 @@
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QHeaderView,
     QPushButton, QLabel, QMessageBox, QDateEdit,
-    QSplitter 
+    QSplitter, QCheckBox, QComboBox 
 )
 
 from PySide6.QtCore import QDate
 
-import core.service.views_processing as serv_view_proc
+import core.service.views_processing          as serv_view_proc
+import core.service.account_processing        as serv_acc_proc 
+import core.service.categories_processing     as serv_cat_proc
 
 import pandas as pd
 
@@ -23,33 +25,54 @@ class ExpansesTab(QWidget):
         layout.setContentsMargins(20,20,20,20)
 
         # фильтр дат
-        date_layout = QHBoxLayout()
+        filter_layout = QHBoxLayout()
 
-        date_layout.addWidget(QLabel("С:"))
         self.date_from = QDateEdit()
         self.date_from.setCalendarPopup(True)
         self.date_from.setDate(QDate.currentDate().addDays(
             -(QDate.currentDate().day() - 1)  # первый день месяца
         ))
-        date_layout.addWidget(self.date_from)
-
-        date_layout.addWidget(QLabel("По:"))
+        
         self.date_to = QDateEdit()
         self.date_to.setCalendarPopup(True)
         self.date_to.setDate(QDate.currentDate())
-        date_layout.addWidget(self.date_to)
+        
 
         btn = QPushButton("Обновить")
         btn.clicked.connect(self.load_expenses_data)
-        # btn.clicked.connect(self.load_moves_data)
-        date_layout.addWidget(btn)
 
-        date_layout.addStretch()
+        self.acc_check = QCheckBox()
 
-        layout.addLayout(date_layout)
+        self.accounts = QComboBox()
+        self.accounts.setMinimumWidth(150)
+        accounts = serv_acc_proc.get_all_accounts()
+        for acc in accounts:
+            self.accounts.addItem(str(acc.acc_name), acc)
+
+        self.cat_check = QCheckBox()
+
+        self.categories = QComboBox()
+        self.categories.setMinimumWidth(150)
+        categories = serv_cat_proc.get_all_categories()
+        for cat in categories:
+            self.categories.addItem(str(cat.cat_name), cat)
+
+        filter_layout.addWidget(btn)
+        filter_layout.addWidget(QLabel("С:"))
+        filter_layout.addWidget(self.date_from)
+        filter_layout.addWidget(QLabel("По:"))
+        filter_layout.addWidget(self.date_to)
+        filter_layout.addWidget(self.acc_check)
+        filter_layout.addWidget(self.accounts)
+        filter_layout.addWidget(self.cat_check)
+        filter_layout.addWidget(self.categories)
+
+        filter_layout.addStretch()
+
+        layout.addLayout(filter_layout)
 
         self.expenses = BaseTable(["Дата","Счет","Категория","Расход"])
-        # expenses_expander = Expander("Расходы", self.expenses)
+
         self.load_expenses_data()
         layout.addWidget(self.expenses)
 
@@ -58,22 +81,33 @@ class ExpansesTab(QWidget):
     def load_expenses_data(self):
         table_data = serv_view_proc.get_expenses_by_day(
             self.date_from.date().toPython(), 
-            self.date_to.date().toPython()
+            self.date_to.date().toPython(),
+            self.accounts.currentData() if self.acc_check.isChecked() else None,
+            self.categories.currentData() if self.cat_check.isChecked() else None,
         )
 
         df = pd.DataFrame([
             {
                 "Дата": row.rec_date.strftime("%d.%m.%Y"),
-                "Счет": row.acc_name,
-                "Категория": row.cat_name,
+                "Счет": row.account.acc_name,
+                "Категория": row.category.cat_name,
                 "Траты": row.expense
             } 
             for row in table_data
         ])
 
+
+        
+        if self.acc_check.isChecked() == self.cat_check.isChecked():
+            columns = ["Счет","Категория"]
+        elif self.acc_check.isChecked():
+            columns = ["Категория"]
+        elif self.cat_check.isChecked():
+            columns = ["Счет"]
+
         pivot_df = df.pivot_table(
             index = "Дата",   
-            columns = ["Счет","Категория"],       
+            columns = columns,       
             values = "Траты",            
             aggfunc = "sum",             
             fill_value = 0             
